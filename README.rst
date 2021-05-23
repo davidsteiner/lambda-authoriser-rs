@@ -24,9 +24,12 @@ Install Cross-Compilation Tools
 Deployment
 ----------
 
+Note: AWS region and user pool ID needs to be set in :code:`./infrastructure/stack.py`. These get 
+passed to the lambda as environment variables.
+
 The deployment requires:
 
-1. CDK CLI (test with 1.105.0)
+1. CDK CLI (tested with 1.105.0)
 2. Pip requirements installed
 3. The Rust toolchain
 4. Cross-compilation tools
