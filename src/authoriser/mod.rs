@@ -3,28 +3,34 @@ mod jwk;
 
 use std::collections::HashMap;
 
-use anyhow::{bail, Result};
+use anyhow::Result;
 use aws_lambda_events::event::apigw::{
-    ApiGatewayCustomAuthorizerPolicy, ApiGatewayCustomAuthorizerRequest,
-    ApiGatewayCustomAuthorizerResponse, IamPolicyStatement,
+    ApiGatewayCustomAuthorizerPolicy, ApiGatewayCustomAuthorizerResponse, IamPolicyStatement,
 };
+use serde::Deserialize;
 use serde_json::Value;
 use tracing::info;
 
 use crate::authoriser::decode::verify_claims;
 
-pub async fn authorise(event: Value) -> Result<ApiGatewayCustomAuthorizerResponse> {
-    let request = serde_json::from_value::<ApiGatewayCustomAuthorizerRequest>(event)?;
-    let claims;
+#[derive(Deserialize, Debug)]
+struct AuthHeaders {
+    #[serde(rename = "Authorization")]
+    authorization: String,
+}
 
-    let username = if let Some(token) = request.authorization_token {
-        claims = verify_claims(&token).await?;
-        let username = claims.get_username()?;
-        info!("verified user: {:?}", username);
-        username
-    } else {
-        bail!("no authorisation token in request");
-    };
+#[derive(Deserialize, Debug)]
+struct AuthorisationRequestEvent {
+    headers: AuthHeaders,
+}
+
+pub async fn authorise(event: Value) -> Result<ApiGatewayCustomAuthorizerResponse> {
+    info!("authorisation event: {:?}", event);
+    let request = serde_json::from_value::<AuthorisationRequestEvent>(event)?;
+
+    let token = request.headers.authorization;
+    let claims = verify_claims(&token).await?;
+    let username = claims.username;
 
     let mut context = HashMap::new();
     context.insert("username".to_owned(), serde_json::to_value(username)?);

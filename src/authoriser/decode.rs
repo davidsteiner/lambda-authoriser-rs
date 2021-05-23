@@ -8,24 +8,7 @@ use crate::authoriser::jwk;
 #[derive(Debug, Deserialize)]
 pub struct Claims {
     #[serde(rename = "cognito:username")]
-    cognito_username: String,
-    identities: Vec<Identity>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Identity {
-    #[serde(rename = "userId")]
-    user_id: String,
-}
-
-impl Claims {
-    pub fn get_username(&self) -> Result<&str> {
-        if let Some(identity) = self.identities.get(0) {
-            Ok(&identity.user_id)
-        } else {
-            bail!("no identities in claims")
-        }
-    }
+    pub username: String,
 }
 
 pub async fn verify_claims(token: &str) -> Result<Claims> {

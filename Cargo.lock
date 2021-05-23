@@ -168,25 +168,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "experimental_authoriser"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "aws_lambda_events",
- "futures",
- "jsonwebtoken",
- "lambda_runtime",
- "reqwest",
- "serde",
- "serde_json",
- "simple-error",
- "tokio",
- "tracing",
- "tracing-futures",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -517,6 +498,25 @@ dependencies = [
  "serde",
  "serde_json",
  "simple_asn1",
+]
+
+[[package]]
+name = "lambda-authoriser"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "aws_lambda_events",
+ "futures",
+ "jsonwebtoken",
+ "lambda_runtime",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "simple-error",
+ "tokio",
+ "tracing",
+ "tracing-futures",
+ "tracing-subscriber",
 ]
 
 [[package]]

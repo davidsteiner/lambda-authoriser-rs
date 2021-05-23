@@ -1,5 +1,5 @@
 [package]
-name = "experimental_authoriser"
+name = "lambda-authoriser"
 version = "0.1.0"
 authors = ["davidsteiner <david.steiner@validusrm.com>"]
 edition = "2018"
