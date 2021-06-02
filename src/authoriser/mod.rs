@@ -14,21 +14,21 @@ use tracing::info;
 use crate::authoriser::decode::verify_claims;
 
 #[derive(Deserialize, Debug)]
-struct AuthHeaders {
-    #[serde(rename = "Authorization")]
-    authorization: String,
+struct QueryStringParameters {
+    token: String,
 }
 
 #[derive(Deserialize, Debug)]
 struct AuthorisationRequestEvent {
-    headers: AuthHeaders,
+    #[serde(rename = "queryStringParameters")]
+    query_string_parameters: QueryStringParameters,
 }
 
 pub async fn authorise(event: Value) -> Result<ApiGatewayCustomAuthorizerResponse> {
     info!("authorisation event: {:?}", event);
     let request = serde_json::from_value::<AuthorisationRequestEvent>(event)?;
 
-    let token = request.headers.authorization;
+    let token = request.query_string_parameters.token;
     let claims = verify_claims(&token).await?;
     let username = claims.username;
 
